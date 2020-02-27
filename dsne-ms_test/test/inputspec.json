@@ -1,0 +1,1 @@
+{"shared_x":{"value":"mnist2500_X.txt"},"shared_y":{"value":"mnist2500_labels.txt"},"no_dims":{"value": 2},"initial_dims":{"value": 30},"perplexity":{"value": 100.0}, "max_iterations":{"value": 1000}}

@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "name": "decentralized multi-shot tsne demo",
+    "id": "dsne-ms_test",
+    "version": "v1.0.0",
+    "repository": "https:\/\/github.com\/hvgazula\/dsne-ms_test",
+    "description": "a test from decentralized multi-shot tsne"
+  },
+  "computation": {
+    "type": "docker",
+    "dockerImage": "dsne-ms_test",
+    "command": [
+      "python",
+      "\/computation\/local.py"
+    ],
+    "remote": {
+      "type": "docker",
+      "dockerImage": "dsne-ms_test",
+      "command": [
+        "python",
+        "\/computation\/remote.py"
+      ]
+    },
+    "input": {
+      "shared_x": {
+        "type": "array"
+      },
+      "shared_y": {
+        "type": "array"
+      },
+      "no_dims": {
+        "type": "number"
+      },
+      "initial_dims": {
+        "type": "number"
+      },
+      "perplexity": {
+        "type": "number"
+      }
+    },
+    "output": {
+      "embedding": {
+        "type": "array"
+      }
+    }
+  }
+}
