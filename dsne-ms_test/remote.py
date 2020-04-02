@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import matplotlib.pyplot as pl
 import sys
 from tsneFunctions import normalize_columns, tsne, listRecursive
 import json
@@ -186,14 +187,14 @@ def remote_3(args):
 
 
 
-    if(iteration == 501):
+    if(iteration == 950):
         phase = 'remote_3';
     else:
         phase = 'remote_2';
 
     #raise Exception(local_labels.shape)
 
-    if (iteration > 101):
+    if (iteration > 901):
 
         with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
             shared_Labels = np.loadtxt(fh1.readlines())
@@ -239,6 +240,11 @@ def remote_3(args):
 def remote_4(args):
 
     # Final aggregation step
+    Y = np.load(os.path.join(args['state']['outputDirectory'], 'final_embed_value.npy'))
+    pl.scatter(Y[:, 0], Y[:, 1], 20, Y[:, 2])
+    pl.savefig(os.path.join(args['state']['outputDirectory'],'sample_fig.png'))
+    pl.savefig(os.path.join(args['state']['transferDirectory'], 'sample_fig.png'))
+
     computation_output = {"output": {"final_embedding": 0}, "success": True}
     return json.dumps(computation_output)
 
