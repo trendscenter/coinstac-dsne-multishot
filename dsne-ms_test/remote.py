@@ -194,7 +194,7 @@ def remote_3(args):
 
     #raise Exception(local_labels.shape)
 
-    if (iteration > 901):
+    if (iteration > 601):
 
         with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
             shared_Labels = np.loadtxt(fh1.readlines())
@@ -241,7 +241,7 @@ def remote_4(args):
 
     # Final aggregation step
     Y = np.load(os.path.join(args['state']['outputDirectory'], 'final_embed_value.npy'))
-    pl.scatter(Y[:, 0], Y[:, 1], 20, Y[:, 2])
+    pl.scatter(Y[:, 0], Y[:, 1], 5, Y[:, 2])
     pl.savefig(os.path.join(args['state']['outputDirectory'],'sample_fig.png'))
     pl.savefig(os.path.join(args['state']['transferDirectory'], 'sample_fig.png'))
 

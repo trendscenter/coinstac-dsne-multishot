@@ -187,7 +187,7 @@ def local_2(args):
     np.save(os.path.join(args['state']['transferDirectory'], 'local_Shared_IY.npy'), local_Shared_IY)
 
     # ------ Need to change here. Instead of sending all local_Y, I have to send mean of local_Y and local site data length
-    np.save(os.path.join(args['state']['transferDirectory'], 'local_Y.npy'), local_Y[local_sharedRows:, :])
+    #np.save(os.path.join(args['state']['transferDirectory'], 'local_Y.npy'), local_Y[local_sharedRows:, :])
 
 
     # save file to local cache directory
@@ -198,7 +198,7 @@ def local_2(args):
     np.save(os.path.join(args['state']['cacheDirectory'], 'local_gains.npy'), local_gains)
     #np.save(os.path.join(args['state']['cacheDirectory'], 'local_shared_Y.npy'), local_Shared_Y)
 
-    if(iter>900):
+    if(iter>600):
         with open(os.path.join(args["state"]["baseDirectory"], 'test_high_dimensional_site_1_mnist_label.txt')) as fh2:
             local_Y_labels = np.loadtxt(fh2.readlines())
 
@@ -223,7 +223,7 @@ def local_2(args):
                 "local_Shared_iY": 'local_Shared_IY.npy',
                 "local_Y_final_emdedding": 'local_Y_final_emdedding.npy',
                 "local_Shared_Y": 'local_Shared_Y.npy',
-                "local_Y": 'local_Y.npy',
+                #"local_Y": 'local_Y.npy',
                 "local_Y_labels": 'local_Y_labels.npy',
                 "computation_phase": "local_2"
         },
@@ -255,7 +255,7 @@ def local_2(args):
                 "error": C,
                 "local_Shared_iY": 'local_Shared_IY.npy',
                 "local_Shared_Y": 'local_Shared_Y.npy',
-                "local_Y": 'local_Y.npy',
+                #"local_Y": 'local_Y.npy',
                 "local_Y_labels": 'local_Y_labels.npy',
                 "computation_phase": "local_2"
         },
