@@ -242,6 +242,10 @@ def remote_4(args):
     # Final aggregation step
     Y = np.load(os.path.join(args['state']['outputDirectory'], 'final_embed_value.npy'))
     pl.scatter(Y[:, 0], Y[:, 1], 5, Y[:, 2])
+    unique_labels = len(np.unique(Y[:, 2]))
+
+    plt.legend(loc="upper right", bbox_to_anchor=(1.15, .75), *scatter.legend_elements(num=unique_labels), title="Digits")
+
     pl.savefig(os.path.join(args['state']['outputDirectory'],'sample_fig.png'))
     pl.savefig(os.path.join(args['state']['transferDirectory'], 'sample_fig.png'))
 
