@@ -44,18 +44,19 @@ def remote_1(args):
            }
        '''
 
-    with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_X.txt')) as fh:
+    with open(os.path.join('/computation', 'remote_data', 'mnist2500_X.txt')) as fh:
         shared_X = np.loadtxt(fh.readlines())
 
-    with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
+    with open(os.path.join('/computation', 'remote_data', 'mnist2500_labels.txt')) as fh1:
         shared_Labels = np.loadtxt(fh1.readlines())
 
 
-
-    no_dims = args["input"]["local0"]["no_dims"]
-    initial_dims = args["input"]["local0"]["initial_dims"]
-    perplexity = args["input"]["local0"]["perplexity"]
-    max_iter = args["input"]["local0"]["max_iterations"]
+    input_list = args["input"]
+    first_user_id = list(input_list.keys())[0]
+    no_dims = input_list[first_user_id]["no_dims"]
+    initial_dims = input_list[first_user_id]["initial_dims"]
+    perplexity = input_list[first_user_id]["perplexity"]
+    max_iter = input_list[first_user_id]["max_iterations"]
 
     shared_X = normalize_columns(shared_X)
     (sharedRows, sharedColumns) = shared_X.shape
@@ -152,6 +153,7 @@ def remote_3(args):
 
     iteration =  args["cache"]["number_of_iterations"]
     iteration +=1;
+    max_iter = args["cache"]["max_iterations"]
     C = args["cache"]["compAvgError"]["error"]
 
     average_Y = [0]*2
@@ -187,16 +189,16 @@ def remote_3(args):
 
 
 
-    if(iteration == 950):
+    if(iteration == (max_iter - ((max_iter / 10) / 2))):
         phase = 'remote_3';
     else:
         phase = 'remote_2';
 
     #raise Exception(local_labels.shape)
 
-    if (iteration > 601):
+    if (iteration > ((max_iter - (( max_iter / 2 ) - (max_iter / 10)))) + 1):
 
-        with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
+        with open(os.path.join('/computation', 'remote_data', 'mnist2500_labels.txt')) as fh1:
             shared_Labels = np.loadtxt(fh1.readlines())
 
         shared_Y_final_emdedding = np.zeros((Y.shape[0],3))
@@ -241,11 +243,15 @@ def remote_4(args):
 
     # Final aggregation step
     Y = np.load(os.path.join(args['state']['outputDirectory'], 'final_embed_value.npy'))
-    pl.scatter(Y[:, 0], Y[:, 1], 5, Y[:, 2])
+    scatter = pl.scatter(Y[:, 0], Y[:, 1], 5, Y[:, 2])
+    unique_labels = len(np.unique(Y[:, 2]))
+
+    pl.legend(loc="upper right", bbox_to_anchor=(1.15, .75), *scatter.legend_elements(num=unique_labels), title="Digits")
+
     pl.savefig(os.path.join(args['state']['outputDirectory'],'sample_fig.png'))
     pl.savefig(os.path.join(args['state']['transferDirectory'], 'sample_fig.png'))
 
-    computation_output = {"output": {"final_embedding": 0}, "success": True}
+    computation_output = {"output": {"final_embedding": 0, "file_name": 'sample_fig.png'}, "success": True}
     return json.dumps(computation_output)
 
 

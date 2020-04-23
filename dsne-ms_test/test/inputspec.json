@@ -1,1 +1,20 @@
-{"shared_x":{"value":"mnist2500_X.txt"},"shared_y":{"value":"mnist2500_labels.txt"},"no_dims":{"value": 2},"initial_dims":{"value": 30},"perplexity":{"value": 100.0}, "max_iterations":{"value": 1000}}
+{
+  "data": {
+    "value": {
+      "site_data": "test_high_dimensional_site_1_mnist_data.txt",
+      "site_label": "test_high_dimensional_site_1_mnist_label.txt"
+    }
+  },
+  "no_dims": {
+    "value": 2
+  },
+  "initial_dims": {
+    "value": 30
+  },
+  "perplexity": {
+    "value": 100
+  },
+  "max_iterations": {
+    "value": 1000
+  }
+}

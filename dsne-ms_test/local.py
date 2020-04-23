@@ -24,7 +24,9 @@ def local_noop(args):
         "cache": {
             "no_dims": input_list["no_dims"],
             "initial_dims": input_list["initial_dims"],
-            "perplexity": input_list["perplexity"]
+            "perplexity": input_list["perplexity"],
+            "max_iterations": input_list["max_iterations"],
+            "data": input_list["data"]
         }
     }
 
@@ -58,7 +60,6 @@ def local_1(args):
 
 
 
-
     shared_X = np.load(os.path.join(args['state']['baseDirectory'], args['input']['shared_X']), allow_pickle=True)
     shared_Y = np.load(os.path.join(args['state']['baseDirectory'], args['input']['shared_y']), allow_pickle=True)
 
@@ -71,7 +72,7 @@ def local_1(args):
 
 
 
-    with open(os.path.join(args["state"]["baseDirectory"], 'test_high_dimensional_site_1_mnist_data.txt')) as fh:
+    with open(os.path.join(args['state']['baseDirectory'], args['cache']['data']['site_data'])) as fh:
         Site1Data = np.loadtxt(fh.readlines())
 
     Site1Data = np.asarray(Site1Data)
@@ -154,11 +155,12 @@ def local_2(args):
 
     compAvgError1 = args["input"]["compAvgError"]
     iter = args["input"]["number_of_iterations"]
+    max_iter = args["cache"]["max_iterations"]
 
 
 
 # Made changes here. Instead of extract shared_Y I am extracting it from cache
-    if(iter > 0):
+    if(iter == (max_iter - 1)):
         shared_Y = np.load(os.path.join(args['state']['baseDirectory'], args['input']['shared_Y']), allow_pickle=True)
         local_Y[:local_sharedRows, :] = shared_Y
 
@@ -187,7 +189,7 @@ def local_2(args):
     np.save(os.path.join(args['state']['transferDirectory'], 'local_Shared_IY.npy'), local_Shared_IY)
 
     # ------ Need to change here. Instead of sending all local_Y, I have to send mean of local_Y and local site data length
-    #np.save(os.path.join(args['state']['transferDirectory'], 'local_Y.npy'), local_Y[local_sharedRows:, :])
+    np.save(os.path.join(args['state']['transferDirectory'], 'local_Y.npy'), local_Y[local_sharedRows:, :])
 
 
     # save file to local cache directory
@@ -198,8 +200,8 @@ def local_2(args):
     np.save(os.path.join(args['state']['cacheDirectory'], 'local_gains.npy'), local_gains)
     #np.save(os.path.join(args['state']['cacheDirectory'], 'local_shared_Y.npy'), local_Shared_Y)
 
-    if(iter>600):
-        with open(os.path.join(args["state"]["baseDirectory"], 'test_high_dimensional_site_1_mnist_label.txt')) as fh2:
+    if(iter < max_iter):
+        with open(os.path.join(args['state']['baseDirectory'], args['cache']['data']['site_label'])) as fh2:
             local_Y_labels = np.loadtxt(fh2.readlines())
 
         np.save(os.path.join(args['state']['transferDirectory'], 'local_Y_labels.npy'), local_Y_labels)
@@ -223,7 +225,7 @@ def local_2(args):
                 "local_Shared_iY": 'local_Shared_IY.npy',
                 "local_Y_final_emdedding": 'local_Y_final_emdedding.npy',
                 "local_Shared_Y": 'local_Shared_Y.npy',
-                #"local_Y": 'local_Y.npy',
+                "local_Y": 'local_Y.npy',
                 "local_Y_labels": 'local_Y_labels.npy',
                 "computation_phase": "local_2"
         },
@@ -243,7 +245,7 @@ def local_2(args):
 
 
     else:
-        with open(os.path.join(args["state"]["baseDirectory"], 'test_high_dimensional_site_1_mnist_label.txt')) as fh2:
+        with open(os.path.join(args['state']['baseDirectory'], args['cache']['data']['site_label'])) as fh2:
             local_Y_labels = np.loadtxt(fh2.readlines())
 
         np.save(os.path.join(args['state']['transferDirectory'], 'local_Y_labels.npy'), local_Y_labels)
@@ -255,7 +257,7 @@ def local_2(args):
                 "error": C,
                 "local_Shared_iY": 'local_Shared_IY.npy',
                 "local_Shared_Y": 'local_Shared_Y.npy',
-                #"local_Y": 'local_Y.npy',
+                "local_Y": 'local_Y.npy',
                 "local_Y_labels": 'local_Y_labels.npy',
                 "computation_phase": "local_2"
         },
@@ -301,6 +303,7 @@ if __name__ == '__main__':
         computation_output = local_noop(parsed_args)
         sys.stdout.write(computation_output)
     elif 'remote_1' in phase_key:
+        #raise Exception(parsed_args)
         computation_output = local_1(parsed_args)
         sys.stdout.write(computation_output)
     elif 'remote_2' in phase_key:
