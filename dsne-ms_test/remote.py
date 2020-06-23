@@ -189,14 +189,14 @@ def remote_3(args):
 
 
 
-    if(iteration == (max_iter - ((max_iter / 10) / 2))):
+    if(iteration == max_iter):
         phase = 'remote_3';
     else:
         phase = 'remote_2';
 
     #raise Exception(local_labels.shape)
 
-    if (iteration > ((max_iter - (( max_iter / 2 ) - (max_iter / 10)))) + 1):
+    if (iteration == max_iter):
 
         with open(os.path.join('/computation', 'remote_data', 'mnist2500_labels.txt')) as fh1:
             shared_Labels = np.loadtxt(fh1.readlines())
