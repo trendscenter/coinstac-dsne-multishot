@@ -154,7 +154,7 @@ def local_2(args):
     local_gains = np.load(os.path.join(cache_dir, args["cache"]["local_gains"]))
 
     compAvgError1 = args["input"]["compAvgError"]
-    iter = args["input"]["number_of_iterations"]
+    iter = args['state']['iteration']
     max_iter = args["cache"]["max_iterations"]
 
 

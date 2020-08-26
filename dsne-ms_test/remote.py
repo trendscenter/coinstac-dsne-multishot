@@ -135,14 +135,11 @@ def remote_2(args):
         "output": {
             "compAvgError": compAvgError,
             "computation_phase": 'remote_2',
-            "shared_Y": 'shared_Y.npy',
-            "number_of_iterations": 0
-
+            "shared_Y": 'shared_Y.npy'
                 },
 
         "cache": {
-            "compAvgError": compAvgError,
-            "number_of_iterations": 0
+            "compAvgError": compAvgError
         }
     }
 
@@ -151,8 +148,7 @@ def remote_2(args):
 
 def remote_3(args):
 
-    iteration =  args["cache"]["number_of_iterations"]
-    iteration +=1;
+    iteration = args['state']['iteration']
     max_iter = args["cache"]["max_iterations"]
     C = args["cache"]["compAvgError"]["error"]
 
@@ -189,14 +185,14 @@ def remote_3(args):
 
 
 
-    if(iteration == max_iter):
+    if(iteration+1 == max_iter):
         phase = 'remote_3';
     else:
         phase = 'remote_2';
 
     #raise Exception(local_labels.shape)
 
-    if (iteration == max_iter):
+    if (iteration+1 == max_iter):
 
         with open(os.path.join('/computation', 'remote_data', 'mnist2500_labels.txt')) as fh1:
             shared_Labels = np.loadtxt(fh1.readlines())
@@ -225,13 +221,11 @@ def remote_3(args):
 
     computation_output = {"output": {
                                 "compAvgError": compAvgError,
-                                "number_of_iterations": iteration,
                                 "shared_Y": 'shared_Y.npy',
                                 "computation_phase": phase},
 
                                 "cache": {
                                     "compAvgError": compAvgError,
-                                    "number_of_iterations": iteration
                                 }
                             }
 
@@ -251,7 +245,12 @@ def remote_4(args):
     pl.savefig(os.path.join(args['state']['outputDirectory'],'sample_fig.png'))
     pl.savefig(os.path.join(args['state']['transferDirectory'], 'sample_fig.png'))
 
-    computation_output = {"output": {"final_embedding": 0, "file_name": 'sample_fig.png'}, "success": True}
+    computation_output = {}
+    computation_output['success'] = True
+    computation_output['output'] = {}
+    computation_output['output']['final_embedding'] = 0
+    computation_output['output']['file_name'] = 'sample_fig.png'
+
     return json.dumps(computation_output)
 
 
