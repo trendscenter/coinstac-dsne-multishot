@@ -160,26 +160,13 @@ def remote_3(args):
     C = 0
 
 
-    average_Y[0] = np.mean([args['input'][site]['MeanX'] for site in args["input"]])
-
-    average_Y[1] = np.mean([args['input'][site]['MeanY'] for site in args["input"]])
-
-
-
-    #raise Exception((np.asarray(prevLabels)).shape)
-
-
-
+    average_Y[0] = args['input'][0]['MeanX']
+    average_Y[1] = args['input'][0]['MeanY']
     average_Y = np.array(average_Y)
-    C = C + np.mean([args['input'][site]['error'] for site in args["input"]])
+    C = C + args['input'][0]['error']
 
-
-
-    meanY = np.mean([np.load(os.path.join(args["state"]["baseDirectory"],site, args["input"][site]["local_Shared_Y"] ), allow_pickle=True) for site in args["input"]], axis=0)
-    meaniY = np.mean([np.load(os.path.join(args["state"]["baseDirectory"], site, args["input"][site]["local_Shared_iY"]), allow_pickle=True) for site in args["input"]], axis=0)
-
-    #raise Exception('shape of meanY', meanY.shape)
-
+    meanY = np.load(os.path.join(args["state"]["baseDirectory"],site, args["input"][site]["local_Shared_Y"] ), allow_pickle=True)
+    meaniY = np.load(os.path.join(args["state"]["baseDirectory"], site, args["input"][site]["local_Shared_iY"]), allow_pickle=True)
 
     Y = meanY + meaniY
 
