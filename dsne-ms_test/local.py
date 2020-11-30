@@ -175,7 +175,9 @@ def local_2(args):
     demeanAvg[1] = compAvgError1['avgY']
     local_Y = demeanL(local_Y, demeanAvg)
 
-    local_Y, dY, local_IY, gains, n, sharedRows, P, C = master_child( local_Y, local_dY, local_IY, local_gains, local_n, local_sharedRows,local_P, iter, C)
+    dY = local_dY
+    n = local_n
+    P = local_P
 
     local_Y[local_sharedRows:, :] = local_Y[local_sharedRows:, :] + local_IY[local_sharedRows:, :]
 
@@ -238,7 +240,7 @@ def local_2(args):
             "local_P": 'local_P.npy',
             "local_n": local_n,
             "local_gains": 'local_gains.npy',
-            "shared_rows": sharedRows
+            "shared_rows": local_sharedRows
             #"local_shared_Y": 'local_shared_Y.npy'
         }
         }
@@ -269,7 +271,7 @@ def local_2(args):
             "local_P": 'local_P.npy',
             "local_n": local_n,
             "local_gains": 'local_gains.npy',
-            "shared_rows": sharedRows
+            "shared_rows": local_sharedRows
             #"local_shared_Y": 'local_shared_Y.npy'
         }
         }
