@@ -159,14 +159,16 @@ def remote_3(args):
     average_Y = [0]*2
     C = 0
 
+    input_list = args["input"]
+    first_user_id = list(input_list.keys())[0]
 
-    average_Y[0] = args['input'][0]['MeanX']
-    average_Y[1] = args['input'][0]['MeanY']
+    average_Y[0] = args['input'][first_user_id]['MeanX']
+    average_Y[1] = args['input'][first_user_id]['MeanY']
     average_Y = np.array(average_Y)
     C = C + args['input'][0]['error']
 
-    meanY = np.load(os.path.join(args["state"]["baseDirectory"],site, args["input"][site]["local_Shared_Y"] ), allow_pickle=True)
-    meaniY = np.load(os.path.join(args["state"]["baseDirectory"], site, args["input"][site]["local_Shared_iY"]), allow_pickle=True)
+    meanY = np.load(os.path.join(args["state"]["baseDirectory"], first_user_id, args["input"][first_user_id]["local_Shared_Y"] ), allow_pickle=True)
+    meaniY = np.load(os.path.join(args["state"]["baseDirectory"], first_user_id, args["input"][first_user_id]["local_Shared_iY"]), allow_pickle=True)
 
     Y = meanY + meaniY
 
