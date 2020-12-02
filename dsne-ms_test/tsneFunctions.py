@@ -5,8 +5,9 @@ Created on Mon Jan 152017
 """
 
 import numpy as np
+from numpy import dot
 from itertools import chain
-
+from scipy.linalg import eigh
 
 def get_all_keys(current_dict):
     children = []
@@ -132,28 +133,25 @@ def x2p(X=np.array([]), tol=1e-5, perplexity=100.0):
 #    print("Mean value of sigma: ", np.mean(np.sqrt(1 / beta)))
     return P
 
-
-def pca(X=np.array([]), no_dims=50):
-    """Runs PCA on the NxD array X in order to reduce its dimensionality to
-    no_dims dimensions.
-
-    Args:
-        X (float): training data of size [examples, features]
-        no_dims (int): integer representing the number of dimensions to reduce
-                        the data to
-
-    Returns:
-        Y (float): reduced training data of size [examples, no_dims]
-
+def pca(x2d, n_comp=50):
+    """ data PCA inspited by https://github.com/alvarouc/ica/blob/03b0335d86126bb431353bafe288211888e7c5bd/ica/ica.py#L52 (mine and Rogers' work)
+    *Input
+    x2d : 2d data matrix of observations by variables
+    n_comp: Number of components to retain
+    *Output
+    Y : PCA projected X (KL-transformed)
     """
-
-    #    print("Preprocessing the data using PCA...")
-    (n, d) = X.shape
-    X = X - np.tile(np.mean(X, 0), (n, 1))
-    (l, M) = np.linalg.eig(np.dot(X.T, X))
-    Y = np.dot(X, M[:, 0:no_dims])
-    return Y
-
+    x2d_demean = x2d - x2d.mean(axis=1).reshape((-1, 1))
+    NSUB, NVOX = x2d_demean.shape
+    if NSUB > NVOX:
+        cov = dot(x2d_demean.T, x2d_demean) / (NSUB - 1)
+        w, v = eigh(cov, eigvals=(NVOX - n_comp, NVOX - 1))
+        x_pca = dot(x2d_demean, v)
+    else:
+        cov = dot(x2d_demean, x2d_demean.T) / (NVOX - 1)
+        w, u = eigh(cov, eigvals=(NSUB - n_comp, NSUB - 1))
+        x_pca = dot(u.T, x2d_demean)
+    return x_pca
 
 def tsne(X=np.array([]),
          Y=np.array([]),
