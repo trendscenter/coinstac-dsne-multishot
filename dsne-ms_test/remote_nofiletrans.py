@@ -12,6 +12,8 @@ import os
 #from coinstac_pyprofiler import custom_profiler as cprof
 #import constants as cs
 
+
+
 def remote_1(args):
     ''' It will receive parameters from dsne_multi_shot.
     After receiving parameters it will compute tsne on high
@@ -46,10 +48,12 @@ def remote_1(args):
            }
        '''
 
-    with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_X.txt')) as fh:
+    #with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_X.txt')) as fh:
+    with open(os.path.join(args["state"]["origBaseDirectory"], 'mnist2500_X.txt')) as fh:
         shared_X = np.loadtxt(fh.readlines())
 
-    with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
+    #with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
+    with open(os.path.join(args["state"]["origBaseDirectory"], 'mnist2500_labels.txt')) as fh1:
         shared_Labels = np.loadtxt(fh1.readlines())
 
 
@@ -177,8 +181,10 @@ def remote_3(args):
 
 
 
-    meanY = np.mean([np.load(os.path.join(args["state"]["baseDirectory"],site, args["input"][site]["local_Shared_Y"] ), allow_pickle=True) for site in args["input"]], axis=0)
-    meaniY = np.mean([np.load(os.path.join(args["state"]["baseDirectory"], site, args["input"][site]["local_Shared_iY"]), allow_pickle=True) for site in args["input"]], axis=0)
+    #meanY = np.mean([np.load(os.path.join(args["state"]["baseDirectory"],site, args["input"][site]["local_Shared_Y"] ), allow_pickle=True) for site in args["input"]], axis=0)
+    #meaniY = np.mean([np.load(os.path.join(args["state"]["baseDirectory"], site, args["input"][site]["local_Shared_iY"]), allow_pickle=True) for site in args["input"]], axis=0)
+    meanY = np.mean([np.load(os.path.join(args["state"]["baseDirectory"], args["input"][site]["local_Shared_Y"] ), allow_pickle=True) for site in args["input"]], axis=0)
+    meaniY = np.mean([np.load(os.path.join(args["state"]["baseDirectory"], args["input"][site]["local_Shared_iY"]), allow_pickle=True) for site in args["input"]], axis=0)
 
     #raise Exception('shape of meanY', meanY.shape)
 
@@ -200,7 +206,8 @@ def remote_3(args):
 
     if (iteration == max_iter):
 
-        with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
+        #with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
+        with open(os.path.join(args["state"]["origBaseDirectory"], 'mnist2500_labels.txt')) as fh1:
             shared_Labels = np.loadtxt(fh1.readlines())
 
         shared_Y_final_emdedding = np.zeros((Y.shape[0],3))
@@ -214,8 +221,11 @@ def remote_3(args):
 
 
 
-        final_embed_value1 = np.vstack([np.load(os.path.join(args["state"]["baseDirectory"], site, args["input"][site]["local_Y_final_emdedding"]),
+        #final_embed_value1 = np.vstack([np.load(os.path.join(args["state"]["baseDirectory"], site, args["input"][site]["local_Y_final_emdedding"]),
+        #                 allow_pickle=True) for site in args["input"]])
+        final_embed_value1 = np.vstack([np.load(os.path.join(args["state"]["baseDirectory"], args["input"][site]["local_Y_final_emdedding"]),
                          allow_pickle=True) for site in args["input"]])
+
         final_embed_value = np.vstack([final_embed_value, final_embed_value1])
 
         np.save(os.path.join(args['state']['transferDirectory'], 'final_embed_value.npy'), final_embed_value)
@@ -257,6 +267,7 @@ def remote_4(args):
 
 #@cprof.profile(type="pyinstrument",  output_file_prefix=cs.get_output_file_path_and_prefix(args, cs.profile_log_dir_name))
 def start_computation(args):
+    #raise Exception(parsed_args)
     parsed_args=json.loads(args)
     np.random.seed(0)
 
@@ -280,8 +291,10 @@ def start_computation(args):
 if __name__ == '__main__':
     from datetime import datetime
     start = datetime.now()
+    #args = json.loads(sys.stdin.read())
     args = sys.stdin.read()
     start_computation(args)
+    #with open('/output/simulator_logs/dummy_rem.txt', 'a') as f:
     with open('/output/simulator_logs/dum_exp2_mixed_py_timediff_run1_remote.txt', 'a') as f:
         print(datetime.now()-start, file=f)
 

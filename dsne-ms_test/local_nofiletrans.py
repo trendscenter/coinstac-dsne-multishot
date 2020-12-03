@@ -75,7 +75,8 @@ def local_1(args):
     sharedRows, sharedColumns = shared_X.shape
 
 
-    with open(os.path.join(args['state']['baseDirectory'], args['cache']['data']['site_data'])) as fh:
+
+    with open(os.path.join(args['state']['origBaseDirectory'], args['cache']['data']['site_data'])) as fh:
         Site1Data = np.loadtxt(fh.readlines())
 
     Site1Data = np.asarray(Site1Data)
@@ -204,7 +205,7 @@ def local_2(args):
     #np.save(os.path.join(args['state']['cacheDirectory'], 'local_shared_Y.npy'), local_Shared_Y)
 
     if(iter == (max_iter-1)):
-        with open(os.path.join(args['state']['baseDirectory'], args['cache']['data']['site_label'])) as fh2:
+        with open(os.path.join(args['state']['origBaseDirectory'], args['cache']['data']['site_label'])) as fh2:
             local_Y_labels = np.loadtxt(fh2.readlines())
 
         np.save(os.path.join(args['state']['transferDirectory'], 'local_Y_labels.npy'), local_Y_labels)
@@ -319,6 +320,7 @@ def start_computation(args):
 if __name__ == '__main__':
     from datetime import datetime
     start = datetime.now()
+    #args = json.loads(sys.stdin.read())
     args = sys.stdin.read()
     start_computation(args)
     with open('/output/simulator_logs/dum_exp2_mixed_py_timediff_run1_local.txt', 'a') as f:
