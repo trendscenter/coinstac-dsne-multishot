@@ -46,12 +46,11 @@ def remote_1(args):
            }
        '''
 
-    with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_X.txt')) as fh:
+    with open(os.path.join('remote_data', 'mnist2500_X.txt')) as fh:
         shared_X = np.loadtxt(fh.readlines())
 
-    with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
+    with open(os.path.join('remote_data', 'mnist2500_labels.txt')) as fh1:
         shared_Labels = np.loadtxt(fh1.readlines())
-
 
     input_list = args["input"]
     first_user_id = list(input_list.keys())[0]
@@ -74,7 +73,6 @@ def remote_1(args):
         initial_dims,
         perplexity,
         computation_phase="remote")
-
 
     np.save(os.path.join(args['state']['transferDirectory'], 'shared_Y.npy'), shared_Y)
     np.save(os.path.join(args['state']['cacheDirectory'], 'shared_Y.npy'), shared_Y)
@@ -200,7 +198,7 @@ def remote_3(args):
 
     if (iteration == max_iter):
 
-        with open(os.path.join(args["state"]["baseDirectory"], 'mnist2500_labels.txt')) as fh1:
+        with open(os.path.join('remote_data', 'mnist2500_labels.txt')) as fh1:
             shared_Labels = np.loadtxt(fh1.readlines())
 
         shared_Y_final_emdedding = np.zeros((Y.shape[0],3))
@@ -284,6 +282,3 @@ if __name__ == '__main__':
     start_computation(args)
     with open('/output/simulator_logs/dum_exp2_mixed_py_timediff_run1_remote.txt', 'a') as f:
         print(datetime.now()-start, file=f)
-
-
-

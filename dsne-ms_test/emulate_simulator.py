@@ -125,13 +125,15 @@ def emulate_simulator_withfiletrans(max_iterations=1000):
     local_state_dict = {"state": {"baseDirectory": "./test/input/local0/simulatorRun",
                                   "outputDirectory": "./test/output/local0/simulatorRun",
                                   "cacheDirectory": "./test/cache/local0/simulatorRun",
-                                  "transferDirectory": "./test/transfer/local0/simulatorRun", "clientId": "local0",
+                                  "transferDirectory": "./test/transfer/local0/simulatorRun",
+                                  "clientId": "local0",
                                   "iteration": 1}}
 
     remote_state_dict = {"state": {"baseDirectory": "./test/input/remote/simulatorRun",
                                    "outputDirectory": "./test/output/remote/simulatorRun",
                                    "cacheDirectory": "./test/cache/remote/simulatorRun",
-                                   "transferDirectory": "./test/transfer/remote/simulatorRun", "clientId": "remote"}}
+                                   "transferDirectory": "./test/transfer/remote/simulatorRun",
+                                   "clientId": "remote"}}
 
     local_input = '{"input": {"data": {"site_data": "test_high_dimensional_site_1_mnist_data.txt", "site_label": "test_high_dimensional_site_1_mnist_label.txt"}, "no_dims": 2, "initial_dims": 30, "perplexity": 30, "max_iterations": ' \
                   + str(max_iterations) \
@@ -150,6 +152,7 @@ def emulate_simulator_withfiletrans(max_iterations=1000):
     iteration = 1
 
     while (not remote_json.get("success")):
+        print(iteration)
 
         #### starts local node computation
         start = datetime.now()
@@ -214,16 +217,16 @@ def emulate_simulator_withfiletrans(max_iterations=1000):
     print("Total iter: ", iteration - 1)
     time_logs = time_logs * 1000
 
-    np.savetxt("./test/output/simulator_logs/dsne_sim_enumlate_WithFT_maxiter_" + str(max_iterations) + ".csv", time_logs,
-               fmt="%10.5f", delimiter=",",
-               header="local_comp,local_parse,file_trans_to_rem,rem_comp,rem_parse,file_trans_to_local0")
+    # np.savetxt("./test/output/simulator_logs/dsne_sim_enumlate_WithFT_maxiter_" + str(max_iterations) + ".csv", time_logs,
+    #            fmt="%10.5f", delimiter=",",
+    #            header="local_comp,local_parse,file_trans_to_rem,rem_comp,rem_parse,file_trans_to_local0")
     return time_logs
 
 
 if __name__ == '__main__':
-    start = datetime.now()
-    emulate_simulator_nofiletrans(1000)
-    print("Total time with no FT: ", datetime.now() - start)
+    #start = datetime.now()
+    #emulate_simulator_nofiletrans(1000)
+    #print("Total time with no FT: ", datetime.now() - start)
 
     start = datetime.now()
     emulate_simulator_withfiletrans(1000)
