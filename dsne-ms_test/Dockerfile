@@ -1,5 +1,6 @@
 #FROM coinstac/coinstac-base
-FROM coinstac/coinstac-base-python-stream 
+FROM coinstacteam/coinstac-base:python3.7-buster-slim
+FROM coinstacteam/coinstac-base:cuda-9.2
 
 # Set the working directory
 WORKDIR /computation
