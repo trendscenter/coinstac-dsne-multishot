@@ -1,0 +1,5 @@
+test/output
+test/cache
+test/system
+test/transfer
+__pycache__
