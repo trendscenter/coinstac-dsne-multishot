@@ -94,7 +94,7 @@ def remote_1(args):
     }
 
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 def remote_2(args):
@@ -146,7 +146,7 @@ def remote_2(args):
         }
     }
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 def remote_3(args):
@@ -236,7 +236,7 @@ def remote_3(args):
                             }
 
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 def remote_4(args):
@@ -252,27 +252,24 @@ def remote_4(args):
     pl.savefig(os.path.join(args['state']['transferDirectory'], 'sample_fig.png'))
 
     computation_output = {"output": {"final_embedding": 0, "file_name": 'sample_fig.png'}, "success": True}
-    return json.dumps(computation_output)
+    return computation_output
 
 
-if __name__ == '__main__':
-
+def start(parsed_args):
     np.random.seed(0)
-    parsed_args = json.loads(sys.stdin.read())
-
     phase_key = list(listRecursive(parsed_args, 'computation_phase'))
 
     if 'local_noop' in phase_key:
         computation_output = remote_1(parsed_args)
-        sys.stdout.write(computation_output)
+        return computation_output
     elif 'local_1' in phase_key:
         computation_output = remote_2(parsed_args)
-        sys.stdout.write(computation_output)
+        return computation_output
     elif 'local_2' in phase_key:
         computation_output = remote_3(parsed_args)
-        sys.stdout.write(computation_output)
+        return computation_output
     elif 'local_3' in phase_key:
         computation_output = remote_4(parsed_args)
-        sys.stdout.write(computation_output)
+        return computation_output
     else:
         raise ValueError("Error occurred at Remote")

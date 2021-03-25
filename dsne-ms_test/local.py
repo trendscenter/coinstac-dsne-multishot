@@ -30,7 +30,7 @@ def local_noop(args):
         }
     }
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 def local_1(args):
@@ -133,7 +133,7 @@ def local_1(args):
 
 
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 
@@ -275,7 +275,7 @@ def local_2(args):
         }
 
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 def local_3(args):
@@ -288,29 +288,25 @@ def local_3(args):
 
     }
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
-if __name__ == '__main__':
+def start(parsed_args):
     np.random.seed(0)
-
-    parsed_args = json.loads(sys.stdin.read())
     phase_key = list(listRecursive(parsed_args, 'computation_phase'))
-
-
 
     if not phase_key:
         computation_output = local_noop(parsed_args)
-        sys.stdout.write(computation_output)
+        return computation_output
     elif 'remote_1' in phase_key:
         #raise Exception(parsed_args)
         computation_output = local_1(parsed_args)
-        sys.stdout.write(computation_output)
+        return computation_output
     elif 'remote_2' in phase_key:
         computation_output = local_2(parsed_args)
-        sys.stdout.write(computation_output)
+        return computation_output
     elif 'remote_3' in phase_key:
         computation_output = local_3(parsed_args)
-        sys.stdout.write(computation_output)
+        return computation_output
     else:
         raise ValueError("Error occurred at Local")
