@@ -26,7 +26,8 @@ def local_noop(args):
             "initial_dims": input_list["initial_dims"],
             "perplexity": input_list["perplexity"],
             "max_iterations": input_list["max_iterations"],
-            "data": input_list["data"]
+            "site_data": input_list["site_data"],
+            "site_label": input_list["site_label"]
         }
     }
 
@@ -70,13 +71,15 @@ def local_1(args):
     perplexity = args["cache"]["perplexity"]
     sharedRows, sharedColumns = shared_X.shape
 
+    if type(args['cache']['site_data']) == list:
+        site_data = args['cache']['site_data'][0]
+    else:
+        site_data = args['cache']['site_data']
 
-
-    with open(os.path.join(args['state']['baseDirectory'], args['cache']['data']['site_data'])) as fh:
+    with open(os.path.join(args['state']['baseDirectory'], site_data)) as fh:
         Site1Data = np.loadtxt(fh.readlines())
 
     Site1Data = np.asarray(Site1Data)
-
 
     # create combinded list by local and remote data
     combined_X = np.concatenate((shared_X, Site1Data), axis=0)
@@ -201,7 +204,7 @@ def local_2(args):
     #np.save(os.path.join(args['state']['cacheDirectory'], 'local_shared_Y.npy'), local_Shared_Y)
 
     if(iter == (max_iter-1)):
-        with open(os.path.join(args['state']['baseDirectory'], args['cache']['data']['site_label'])) as fh2:
+        with open(os.path.join(args['state']['baseDirectory'], args['cache']['site_label'])) as fh2:
             local_Y_labels = np.loadtxt(fh2.readlines())
 
         np.save(os.path.join(args['state']['transferDirectory'], 'local_Y_labels.npy'), local_Y_labels)
@@ -245,7 +248,7 @@ def local_2(args):
 
 
     else:
-        #with open(os.path.join(args['state']['baseDirectory'], args['cache']['data']['site_label'])) as fh2:
+        #with open(os.path.join(args['state']['baseDirectory'], args['cache']['site_label'])) as fh2:
             #local_Y_labels = np.loadtxt(fh2.readlines())
 
         #np.save(os.path.join(args['state']['transferDirectory'], 'local_Y_labels.npy'), local_Y_labels)
