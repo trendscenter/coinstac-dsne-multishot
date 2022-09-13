@@ -8,4 +8,4 @@ This was a single site run in COINSTAC UI with a pipeline set up to reflect the 
 
 An image file is generated and placed in each site's output folder.
 
-![Results View](https://github.com/trendscenter/coinstac-dsne-multishot/tree/master/test/results/results.png "Results View")
+![Results View](https://raw.githubusercontent.com/trendscenter/coinstac-dsne-multishot/master/test/results/sample_fig.png "Results View")
